@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-plt.style.use("seaborn-white")
+
 
 
 class MAM:
@@ -267,7 +267,7 @@ class MAM:
             df_temp["time_till_conv"] = (
                 df_temp[group_timestamp_colname + "_y"]
                 - df_temp[group_timestamp_colname + "_x"]
-            ).astype("timedelta64[h]")
+            ).dt.total_seconds() / 3600
 
             df_temp = (
                 df_temp.groupby(group_channels_by_id_list)["time_till_conv"]
