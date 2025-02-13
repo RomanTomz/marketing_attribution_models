@@ -330,7 +330,7 @@ class MAM:
             # converts channels str to list of channels
             if isinstance(df[channels_colname].iloc[0], str):
                 self._print("Status_journey_to_list: Working")
-                self.channels = df[channels_colname].apply(lambda x: x.split(self.sep))
+                self.channels = df[channels_colname].str.split(self.sep)
                 self._print("Status_journey_to_list: Done")
             else:
                 self.channels = df[channels_colname]
