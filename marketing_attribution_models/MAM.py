@@ -587,6 +587,19 @@ class MAM:
         ax.set_frame_on(False)
 
         return ax
+    
+    def plot_shapley_distributions(self):
+        """Plots the distribution of the Shapley values for each channel."""
+        if isinstance(self.shapley_values, pd.DataFrame):
+            ax = self.shapley_values.drop(columns=["channels"]).plot(
+                kind="box", figsize=(20, 7)
+            )
+            ax.set_title("Shapley Values Distribution")
+            ax.set_ylabel("Shapley Value")
+            ax.set_xlabel("Channels")
+            return ax
+        else:
+            warnings.warn("No Shapley values were found on this object.")
 
     def channels_journey_time_based_overwrite(
         self, selected_channel="Direct", time_window=24, order=1, inplace=False
