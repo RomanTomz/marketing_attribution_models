@@ -590,16 +590,19 @@ class MAM:
     
     def plot_shapley_distributions(self):
         """Plots the distribution of the Shapley values for each channel."""
-        if isinstance(self.shapley_values, pd.DataFrame):
-            ax = self.shapley_values.drop(columns=["channels"]).plot(
-                kind="box", figsize=(20, 7)
-            )
-            ax.set_title("Shapley Values Distribution")
-            ax.set_ylabel("Shapley Value")
-            ax.set_xlabel("Channels")
+        if hasattr(self, "shapley_values") and isinstance(self.shapley_values, pd.DataFrame):
+            print("available columns: ", self.shapley_values.columns)
+
+            columns_to_drop = [col for col in ['channels', 'shapley_values'] if col in self.shapley_values.columns]
+            df_plot = self.shapley_values.drop(columns=columns_to_drop)
+
+            ax = df_plot.plot(kind='box', figsize=(20, 7))
+            ax.set_title('Shapley Values Distribution')
+            ax.set_ylabel('Shapley Value')
+            ax.set_xlabel('Channels')
             return ax
         else:
-            warnings.warn("No Shapley values were found on this object.")
+            warnings.warn("No Shapley values were found. Please run the attribution_shapley method first.")
 
     def channels_journey_time_based_overwrite(
         self, selected_channel="Direct", time_window=24, order=1, inplace=False
@@ -1631,5 +1634,5 @@ class MAM:
                 self.group_by_channels_models.columns = ["channels", model_name]
         else:
             frame = "group_by_channels_models=False"
-
+        self.shapley_values = conv_table
         return (conv_table, frame)
